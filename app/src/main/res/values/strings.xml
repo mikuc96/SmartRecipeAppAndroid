@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">smart recipe</string>
+    <string name="start">Start</string>
+    <string name="dodajPrzepis">Dodaj Przepis</string>
+    <string name="twojePrzepisy">Twoje Przepisy</string>
+    <string name="inteligentyPomocnik">Inteligentny pomocnik</string>
+</resources>

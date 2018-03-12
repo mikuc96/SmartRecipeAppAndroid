@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "386042664272",
+    "firebase_url": "https://smartrecipe-32e3d.firebaseio.com",
+    "project_id": "smartrecipe-32e3d",
+    "storage_bucket": "smartrecipe-32e3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386042664272:android:097a928867fedc76",
+        "android_client_info": {
+          "package_name": "com.example.mikuc.smartrecipe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386042664272-qe53oseirhngeg0ni7gaa7jtchfl41o6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mikuc.smartrecipe",
+            "certificate_hash": "3aafe842e34d6ddadd3e1223827e529d1b65dc03"
+          }
+        },
+        {
+          "client_id": "386042664272-fl9vutsdetrpvenn4l5e325dk0vpkj3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjH4V0sUQzgR6oTvoxmufcv9hkeWFT43k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386042664272-fl9vutsdetrpvenn4l5e325dk0vpkj3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

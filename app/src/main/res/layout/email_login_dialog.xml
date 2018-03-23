@@ -1,0 +1,36 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mikuc.smartrecipe.emailLoginDialog"
+    android:padding="20dp">
+
+
+    <EditText
+        android:hint="Email"
+        android:id="@+id/email_emailLoginDialog"
+        android:inputType="textEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <EditText
+        android:hint="Hasło"
+        android:inputType="textPassword"
+        android:id="@+id/password_emailLoginDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <Button
+        android:id="@+id/reg_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nie masz konta? Zarejestruj się"
+        android:textSize="8sp"
+        android:textColor="#949494"
+        android:textAlignment="textStart"/>
+
+</LinearLayout>

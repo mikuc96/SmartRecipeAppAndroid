@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="192dp"
-    android:background="?attr/colorPrimaryDark"
-    android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="#257b6c"
+    android:gravity="bottom"
     android:orientation="vertical"
-    android:gravity="bottom">
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <TextView
+
+    <Button
+        android:id="@+id/email_login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="My header title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:textSize="10dp"
+        android:text="@string/navHeader"
+        android:textAlignment="textStart"
+        android:drawableLeft="@drawable/ic_mail_outline_black_24dp"
+        style="@style/Widget.AppCompat.Light.ActionButton"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/fb_login_btn"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="Facebook"
+            android:background="#3B5998" />
+
+        <Button
+
+            android:id="@+id/google_login_btn"
+            android:layout_width="120dp"
+            android:background="#c71610"
+            android:text="Google"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </LinearLayout>

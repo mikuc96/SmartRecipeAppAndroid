@@ -12,7 +12,7 @@
         android:id="@+id/email_login_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="10dp"
+        android:textSize="12sp"
         android:text="@string/navHeader"
         android:textAlignment="textStart"
         android:drawableLeft="@drawable/ic_mail_outline_black_24dp"
@@ -30,12 +30,12 @@
             android:background="#3B5998" />
 
         <Button
-
             android:id="@+id/google_login_btn"
             android:layout_width="120dp"
             android:background="#c71610"
             android:text="Google"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -1,25 +1,21 @@
 package com.example.mikuc.smartrecipe
-import android.support.v7.app.AppCompatActivity
+
 import android.os.Bundle
-import android.view.MenuItem
 import android.support.v4.view.GravityCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.widget.Button
-import kotlinx.android.synthetic.main.activity_main.*
-import android.support.v7.app.AlertDialog
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
+import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import org.jetbrains.anko.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 
-
-
-class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
+class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface {
     override fun chaneUIinvisible() {
         InVisibleNavHeader()
     }
@@ -30,9 +26,9 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
 
 
     override fun createDataBaseUserInfo(UserId: String, fistname: String, lastname: String) {
-                        val currentUserDb = mDatabaseReference!!.child(UserId)
-                        currentUserDb.child("firstName").setValue(fistname)
-                        currentUserDb.child("lastName").setValue(lastname)
+        val currentUserDb = mDatabaseReference!!.child(UserId)
+        currentUserDb.child("firstName").setValue(fistname)
+        currentUserDb.child("lastName").setValue(lastname)
     }
 
     override fun stopProgeCircle() {
@@ -44,16 +40,14 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
     }
 
 
-
     val manager = supportFragmentManager
-    private  var mDatabaseReference: DatabaseReference?= null
+    private var mDatabaseReference: DatabaseReference? = null
     private var mDatabase: FirebaseDatabase? = null
-    private var facebookLoginBtn:Button? = null
-    private var googleLoginBtn:Button? = null
-    private var emailLoginBtn:Button? = null
+    private var facebookLoginBtn: Button? = null
+    private var googleLoginBtn: Button? = null
+    private var emailLoginBtn: Button? = null
     private var mAuth: FirebaseAuth? = null
-    private var logRegClass: LogReg?=null
-
+    private var logRegClass: LogReg? = null
 
 
     override fun onStart() {
@@ -66,7 +60,7 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        logRegClass= LogReg(this@MainActivity)
+        logRegClass = LogReg(this@MainActivity)
         mDatabase = FirebaseDatabase.getInstance()
         mDatabaseReference = mDatabase?.reference?.child("Users")
 
@@ -85,14 +79,14 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
             true
         }
 
-        val headerLayout =nav_view.getHeaderView(0)
-        emailLoginBtn=headerLayout.findViewById<Button>(R.id.email_login_button)
-        facebookLoginBtn=headerLayout.findViewById<Button>(R.id.fb_login_btn)
-        googleLoginBtn=headerLayout.findViewById<Button>(R.id.google_login_btn)
+        val headerLayout = nav_view.getHeaderView(0)
+        emailLoginBtn = headerLayout.findViewById<Button>(R.id.email_login_button)
+        facebookLoginBtn = headerLayout.findViewById<Button>(R.id.fb_login_btn)
+        googleLoginBtn = headerLayout.findViewById<Button>(R.id.google_login_btn)
 
         emailLoginBtn?.setOnClickListener {
 
-                val dial=LogRegDialogs(this@MainActivity)
+            val dial = LogRegDialogs(this@MainActivity)
             dial.CreateLogInDialogByEmailandPassword()
 
 //            val builder=AlertDialog.Builder(this@MainActivity)
@@ -159,8 +153,8 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
 //            }
 
         }
-        facebookLoginBtn?.setOnClickListener {  }
-        googleLoginBtn?.setOnClickListener {  }
+        facebookLoginBtn?.setOnClickListener { }
+        googleLoginBtn?.setOnClickListener { }
     }
 
 
@@ -215,23 +209,20 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
     }
 
 
-    fun VisibleNavHeader()
-    {
-        facebookLoginBtn?.visibility=View.VISIBLE
-        googleLoginBtn?.visibility= View.VISIBLE
-        emailLoginBtn?.text="Logowanie/Rejestracja przez email"
-    }
-    fun InVisibleNavHeader()
-    {
-        val user=logRegClass?.getUser()
-        val nameUser=user?.email.toString()
-        facebookLoginBtn?.visibility=View.GONE
-        googleLoginBtn?.visibility= View.GONE
-        emailLoginBtn?.text="Witaj "+nameUser
-
+    fun VisibleNavHeader() {
+        facebookLoginBtn?.visibility = View.VISIBLE
+        googleLoginBtn?.visibility = View.VISIBLE
+        emailLoginBtn?.text = "Logowanie/Rejestracja przez email"
     }
 
+    fun InVisibleNavHeader() {
+        val user = logRegClass?.getUser()
+        val nameUser = user?.email.toString()
+        facebookLoginBtn?.visibility = View.GONE
+        googleLoginBtn?.visibility = View.GONE
+        emailLoginBtn?.text = "Witaj " + nameUser
 
+    }
 
 
 }

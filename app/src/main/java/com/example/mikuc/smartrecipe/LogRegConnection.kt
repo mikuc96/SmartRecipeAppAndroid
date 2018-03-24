@@ -3,11 +3,7 @@ package com.example.mikuc.smartrecipe
 import android.app.Activity
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.yesButton
-import org.jetbrains.anko.*
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserInfo
 
 
 interface LogRegInterface{

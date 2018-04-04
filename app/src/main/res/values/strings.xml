@@ -1,16 +1,11 @@
 <resources>
     <string name="app_name">smart recipe</string>
-    <string name="start">Start</string>
     <string name="dodajPrzepis">Dodaj Przepis</string>
     <string name="twojePrzepisy">Twoje Przepisy</string>
     <string name="inteligentyPomocnik">Inteligentny pomocnik</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="twoje_konto">Twoje Konto</string>
-    <string name="zaloguj"> Zaloguj</string>
-    <string name="rejestracja">Rejestracja</string>
-    <string name="nav_header_title">Zaloguj się aby tworzyć własne przepisy</string>
     <string name="navHeader">Logowanie/Rejestracja przez email</string>
     <string name="your_profile">Twój Profil</string>
 

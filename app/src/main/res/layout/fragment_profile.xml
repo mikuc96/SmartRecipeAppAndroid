@@ -1,15 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.mikuc.smartrecipe.AddRecipeFragment">
+    tools:context=".ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
+        android:id="@+id/logout_btn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
-        android:textSize="20sp" />
+        android:layout_gravity="bottom"
+
+        android:text="Logout" />
 
 </LinearLayout>

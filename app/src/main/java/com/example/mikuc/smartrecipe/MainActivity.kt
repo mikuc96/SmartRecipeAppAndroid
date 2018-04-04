@@ -1,4 +1,5 @@
 package com.example.mikuc.smartrecipe
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -6,69 +7,50 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.widget.Toolbar
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_main.*
-import android.support.v7.app.AlertDialog
-import android.util.Log
+
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
+import com.example.mikuc.smartrecipe.Authorization.LogRegConnection
+import com.example.mikuc.smartrecipe.Authorization.logRegConnectionInterface
+import com.example.mikuc.smartrecipe.LogRegDialog.LoginByEmailAndPasswordDialogs
+
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import org.jetbrains.anko.*
+import org.jetbrains.anko.doAsyncResult
+import org.jetbrains.anko.toast
+import org.w3c.dom.Text
+
+
+class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFragment.profileFragmentInterface {
 
 
 
-
-class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
-    override fun chaneUIinvisible() {
-        InVisibleNavHeader()
-    }
-
-    override fun chaneUIvisible() {
-        VisibleNavHeader()
-    }
-
-
-    override fun createDataBaseUserInfo(UserId: String, fistname: String, lastname: String) {
-                        val currentUserDb = mDatabaseReference!!.child(UserId)
-                        currentUserDb.child("firstName").setValue(fistname)
-                        currentUserDb.child("lastName").setValue(lastname)
-    }
-
-    override fun stopProgeCircle() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun Logout() {
-        logRegClass?.LogOut()
-    }
-
-
-
-    val manager = supportFragmentManager
-    private  var mDatabaseReference: DatabaseReference?= null
+    private val manager = supportFragmentManager
+    private var mDatabaseReference: DatabaseReference?= null
     private var mDatabase: FirebaseDatabase? = null
     private var facebookLoginBtn:Button? = null
     private var googleLoginBtn:Button? = null
     private var emailLoginBtn:Button? = null
-    private var mAuth: FirebaseAuth? = null
-    private var logRegClass: LogReg?=null
+    private var logRegClass: LogRegConnection?=null
+    private var dial: LoginByEmailAndPasswordDialogs?=null
 
 
 
     override fun onStart() {
         super.onStart()
         logRegClass?.IfLogedin()
-
+        progressBar2.visibility=View.GONE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
-        logRegClass= LogReg(this@MainActivity)
+        logRegClass= LogRegConnection(this@MainActivity)
         mDatabase = FirebaseDatabase.getInstance()
         mDatabaseReference = mDatabase?.reference?.child("Users")
+
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -79,90 +61,21 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
         nav_view.setNavigationItemSelectedListener { menuItem ->
 
             menuItem.isChecked = true
-            drawer_layout.closeDrawers()
+
             actionbar?.title = menuItem.title
             setFragment(menuItem.title.toString())
+            drawer_layout.closeDrawers()
             true
         }
 
         val headerLayout =nav_view.getHeaderView(0)
-        emailLoginBtn=headerLayout.findViewById<Button>(R.id.email_login_button)
-        facebookLoginBtn=headerLayout.findViewById<Button>(R.id.fb_login_btn)
-        googleLoginBtn=headerLayout.findViewById<Button>(R.id.google_login_btn)
+        emailLoginBtn=headerLayout.findViewById(R.id.email_login_button)
+        facebookLoginBtn=headerLayout.findViewById(R.id.fb_login_btn)
+        googleLoginBtn=headerLayout.findViewById(R.id.google_login_btn)
+        dial= LoginByEmailAndPasswordDialogs(this@MainActivity)
+        VisibleNavHeader()
 
-        emailLoginBtn?.setOnClickListener {
-
-                val dial=LogRegDialogs(this@MainActivity)
-            dial.CreateLogInDialogByEmailandPassword()
-
-//            val builder=AlertDialog.Builder(this@MainActivity)
-//            val view=layoutInflater.inflate(R.layout.email_login_dialog,null)
-//            title = "Logowanie"
-//            val regButton=view.findViewById<Button>(R.id.reg_button)
-//            builder.setView(view)
-//                    .setPositiveButton("Zaloguj",
-//                            { _, _ ->
-//
-//                                val email=view.findViewById<EditText>(R.id.email_emailLoginDialog).text.toString()
-//                                val password=view.findViewById<EditText>(R.id.password_emailLoginDialog).text.toString()
-//                                logRegClass?.loginEmailandPassword(email,password)
-//
-//                            })
-//            builder.setNegativeButton("Anuluj", { _, _ ->
-//
-//            })
-//            val dialog=builder.create()
-//            dialog.show()
-
-//            regButton.setOnClickListener {
-//
-//                val view2=layoutInflater.inflate(R.layout.email_reg_dialog,null)
-//
-//                builder.setView(view2)
-//                        .setPositiveButton("Zarejestruj",
-//                                { _, _ ->
-//
-//                                    val progres=indeterminateProgressDialog("Logowanie")
-//                                    progres.show()
-//                                    val email2=view.findViewById<EditText>(R.id.email_reg_LoginDialog).text.toString()
-//                                    val password2=view.findViewById<EditText>(R.id.password_reg_LoginDialog).text.toString()
-//                                    val firstName2=view.findViewById<EditText>(R.id.name_reg_LoginDialog).text.toString()
-//                                    val lastName2=view.findViewById<EditText>(R.id.surname_reg_LoginDialog).text.toString()
-//
-//                                    logRegClass?.createUserbyEmailandPassword(email2,password2,firstName2,lastName2)
-////                                    mAuth!!
-////                                            .createUserWithEmailAndPassword(email2, password2)
-////                                            .addOnCompleteListener(this) { task ->
-////
-////                                                if (task.isSuccessful) {
-////                                                    progres.hide()
-////                                                    val userId = mAuth!!.currentUser!!.uid
-////                                                    val currentUserDb = mDatabaseReference!!.child(userId)
-////                                                    currentUserDb.child("firstName").setValue(firstName2)
-////                                                    currentUserDb.child("lastName").setValue(lastName2)
-////
-////                                                    InVisibleNavHeader()
-////
-////                                                } else {
-////                                                    progres.hide()
-////
-////                                                    alert("Błąd podczas rejestracji") {
-////                                                        yesButton() {}
-////
-////                                                    }.show()
-////
-////                                                }
-////                                            }
-//                                })
-//                builder.setNegativeButton("Anuluj", { _, _ ->
-//                }).create().show()
-//            }
-
-        }
-        facebookLoginBtn?.setOnClickListener {  }
-        googleLoginBtn?.setOnClickListener {  }
     }
-
 
     fun setFragment(id: String) {
         when (id) {
@@ -174,19 +87,23 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
             }
             "Twoje Przepisy" -> {
                 manager.beginTransaction()
-                        .replace(R.id.content_frame, AddRecipeFragment())
-                        .addToBackStack("AddRecipeFragment").commit()
+                        .replace(R.id.content_frame, ShowRecipesFragment())
+                        .addToBackStack("ShowRecipesFragment").commit()
             }
             "Inteligentny Pomocnik" -> {
                 manager.beginTransaction()
-                        .replace(R.id.content_frame, AddRecipeFragment())
-                        .addToBackStack("AddRecipeFragment").commit()
+                        .replace(R.id.content_frame, AssistantFragment())
+                        .addToBackStack("AssistantFragment").commit()
+            }
+            "Twój Profil" -> {
+                manager.beginTransaction()
+                        .replace(R.id.content_frame, ProfileFragment())
+                        .addToBackStack("ProfileFragment").commit()
             }
         }
 
 
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -197,43 +114,56 @@ class MainActivity : AppCompatActivity(), MyCallback, LogRegInterface{
         return super.onOptionsItemSelected(item)
     }
 
-    private fun verifyEmail() {
-        val mUser = mAuth!!.currentUser;
-        mUser!!.sendEmailVerification()
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this@MainActivity,
-                                "Verification email sent to " + mUser.getEmail(),
-                                Toast.LENGTH_SHORT).show()
-                    } else {
-                        Log.e("Tag1111", "sendEmailVerification", task.exception)
-                        Toast.makeText(this@MainActivity,
-                                "Failed to send verification email.",
-                                Toast.LENGTH_SHORT).show()
-                    }
-                }
-    }
-
-
-    fun VisibleNavHeader()
+    override fun VisibleNavHeader()
     {
+
         facebookLoginBtn?.visibility=View.VISIBLE
         googleLoginBtn?.visibility= View.VISIBLE
         emailLoginBtn?.text="Logowanie/Rejestracja przez email"
+        emailLoginBtn?.setOnClickListener {
+            dial?.showLogInByEmailandPasswordDialog()
+            drawer_layout.closeDrawers()
+        }
+        facebookLoginBtn?.setOnClickListener {  }
+        googleLoginBtn?.setOnClickListener {  }
+
     }
-    fun InVisibleNavHeader()
+    override fun InVisibleNavHeader()
     {
         val user=logRegClass?.getUser()
         val nameUser=user?.email.toString()
         facebookLoginBtn?.visibility=View.GONE
         googleLoginBtn?.visibility= View.GONE
         emailLoginBtn?.text="Witaj "+nameUser
+        emailLoginBtn?.setOnClickListener {
+            setFragment("Twój Profil")
+            drawer_layout.closeDrawers()
+        }
+    }
 
+    override fun logOut() {
+
+        Toast.makeText(applicationContext, "Logout succesfull", Toast.LENGTH_LONG).show()
+        logRegClass?.LogOut()
+        VisibleNavHeader()
+    }
+
+    override fun sentMassage(info: String) {
+        Toast.makeText(applicationContext, info, Toast.LENGTH_LONG).show()
+    }
+
+    override fun hideProgress() {
+        progressBar2.visibility=View.GONE
+    }
+
+    override fun showProgress() {
+        progressBar2.visibility=View.VISIBLE
     }
 
 
 
 
 }
+
 
 

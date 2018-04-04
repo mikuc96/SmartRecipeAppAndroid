@@ -3,15 +3,19 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/dodaj_przepis"
+            android:id="@+id/add_recipe_fragment"
             android:title="@string/dodajPrzepis" />
         <item
-            android:id="@+id/twoje_przepisy"
+            android:id="@+id/fragment_show_recipe"
 
             android:title="@string/twojePrzepisy" />
         <item
-            android:id="@+id/inteligenty_pomocnik"
+        android:id="@+id/fragment_assistant"
 
-            android:title="@string/inteligentyPomocnik" />
+        android:title="@string/inteligentyPomocnik" />
+        <item
+            android:id="@+id/fragment_profile"
+
+            android:title="@string/your_profile" />
     </group>
 </menu>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/add_ingreadient_dialog_amount_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Ilość "
+            android:inputType="text"
+            android:singleLine="true"
+            android:textSize="25dp" />
+        <EditText
+            android:id="@+id/add_ingreadient_dialog_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Nazwa składnika"
+            android:inputType="text"
+            android:textSize="25dp" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioGroup
+
+            android:id="@+id/add_ingreadient_dialog_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/add_ingreadient_dialog_gram_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="g" />
+
+            <RadioButton
+                android:id="@+id/add_ingreadient_dialog_kg_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="kg" />
+
+            <RadioButton
+                android:id="@+id/add_ingreadient_dialog_ml_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ml" />
+
+            <RadioButton
+
+                android:id="@+id/add_ingreadient_dialog_l_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="l" />
+
+            <RadioButton
+
+                android:id="@+id/add_ingreadient_dialog_sztuk_rb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sztuk" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+
+</LinearLayout>

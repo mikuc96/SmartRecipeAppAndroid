@@ -9,16 +9,16 @@ import android.widget.Button
 import kotlinx.android.synthetic.main.activity_main.*
 
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.example.mikuc.smartrecipe.Authorization.LogRegConnection
 import com.example.mikuc.smartrecipe.Authorization.logRegConnectionInterface
-import com.example.mikuc.smartrecipe.LogRegDialog.LoginByEmailAndPasswordDialogs
+import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
+import com.example.mikuc.smartrecipe.Dialogs.LoginByEmailAndPasswordDialogs
 
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.toast
-import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFragment.profileFragmentInterface {
@@ -26,15 +26,15 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFrag
 
 
     private val manager = supportFragmentManager
-    private var mDatabaseReference: DatabaseReference?= null
-    private var mDatabase: FirebaseDatabase? = null
     private var facebookLoginBtn:Button? = null
     private var googleLoginBtn:Button? = null
     private var emailLoginBtn:Button? = null
     private var logRegClass: LogRegConnection?=null
     private var dial: LoginByEmailAndPasswordDialogs?=null
 
-
+    companion object {
+        var database:FireBaseDB?=FireBaseDB()
+    }
 
     override fun onStart() {
         super.onStart()
@@ -42,15 +42,12 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFrag
         progressBar2.visibility=View.GONE
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-
         logRegClass= LogRegConnection(this@MainActivity)
-        mDatabase = FirebaseDatabase.getInstance()
-        mDatabaseReference = mDatabase?.reference?.child("Users")
-
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -61,7 +58,6 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFrag
         nav_view.setNavigationItemSelectedListener { menuItem ->
 
             menuItem.isChecked = true
-
             actionbar?.title = menuItem.title
             setFragment(menuItem.title.toString())
             drawer_layout.closeDrawers()
@@ -74,6 +70,10 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFrag
         googleLoginBtn=headerLayout.findViewById(R.id.google_login_btn)
         dial= LoginByEmailAndPasswordDialogs(this@MainActivity)
         VisibleNavHeader()
+        nav_view.menu.getItem(0).isChecked = true
+        actionbar?.title="Twoje Przepisy"
+        setFragment("Twoje Przepisy")
+
 
     }
 

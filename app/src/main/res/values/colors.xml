@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <color name="foreground_material_dark_1">#55a4c9</color>
+</resources>

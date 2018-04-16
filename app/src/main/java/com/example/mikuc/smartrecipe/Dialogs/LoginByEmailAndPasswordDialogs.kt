@@ -1,4 +1,4 @@
-package com.example.mikuc.smartrecipe.LogRegDialog
+package com.example.mikuc.smartrecipe.Dialogs
 
 import android.app.Activity
 import android.support.v7.app.AlertDialog

@@ -1,11 +1,12 @@
 package com.example.mikuc.smartrecipe.Authorization
 import android.app.Activity
 import android.util.Log
+import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
+import com.example.mikuc.smartrecipe.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+
 
 
 
@@ -35,7 +36,7 @@ class LogRegConnection(ac: Activity) {
                         inter?.sentMassage("Logged in successfully")
                         inter?.InVisibleNavHeader()
                         inter?.hideProgress()
-
+                        MainActivity.database=FireBaseDB()
                         Log.d("Log", "Login ok")
                     } else {
                         inter?.sentMassage("Unsuccessful, check input data")
@@ -101,10 +102,12 @@ class LogRegConnection(ac: Activity) {
         val currentUser = mAuth?.currentUser
         if(currentUser!=null) inter?.InVisibleNavHeader()
         else                  inter?.VisibleNavHeader()
+//        MainActivity.database= FireBaseDB()
     }
 
     fun LogOut() {
         mAuth?.signOut()
+        MainActivity.database?.recipesList=ArrayList()
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.mikuc.smartrecipe
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.LinearLayout
@@ -10,13 +11,16 @@ import com.example.mikuc.smartrecipe.DataModels.RecipeModel
 import com.example.mikuc.smartrecipe.Dialogs.AddDescritptionDialog
 import com.example.mikuc.smartrecipe.Dialogs.AddIngredientDialog
 import com.example.mikuc.smartrecipe.Dialogs.TransferInformationFromAddDescritptionDialog
+import com.example.mikuc.smartrecipe.Interfaces.StartShowRecipesFragmentFromAddRecipe
 import com.example.mikuc.smartrecipe.Interfaces.transferDataFromIngreadientDialog
 
 import com.example.mikuc.smartrecipe.RecycleView.IngredientsRecycleViewAdapter
 import kotlinx.android.synthetic.main.fragment_add_recipe.*
+import org.jetbrains.anko.act
 
 
 class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, TransferInformationFromAddDescritptionDialog {
+
 
 
     var AddIngreadientDialog: AddIngredientDialog? = null
@@ -31,6 +35,13 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, Transfe
     var description_string:String?=null
     var description: TextureView? = null
 
+
+    var myinterface:StartShowRecipesFragmentFromAddRecipe?=null
+
+    fun setListener(listener:StartShowRecipesFragmentFromAddRecipe){
+        myinterface=listener
+
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
@@ -48,7 +59,12 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, Transfe
 
     override fun onStart() {
         super.onStart()
-
+        fragmentManager?.addOnBackStackChangedListener(
+                object : FragmentManager.OnBackStackChangedListener {
+                    override fun onBackStackChanged() {
+                        activity?.actionBar?.title="Twoje Przepisy"
+                    }
+                })
         recycle_view.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
         setAdapter()
 
@@ -80,13 +96,23 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, Transfe
             if(add_recipe_rb_1h.isChecked) time="1h"
             if(add_recipe_rb_2h.isChecked) time="2h"
 
-            val recipe=RecipeModel(name!!,hardness!!,IngreadientsList!!,description_string!!,time!!,people!!)
 
-            Toast.makeText(context,"cos",Toast.LENGTH_SHORT).show()
+            description_string.isNullOrEmpty()
+            if(!name!!.isEmpty() && !IngreadientsList!!.isEmpty() && !description_string.isNullOrEmpty())
+            {
+                val recipe=RecipeModel(name!!,hardness!!,IngreadientsList!!,description_string!!,time!!,people!!,hashCode().toString())
+                MainActivity.database?.addRecipe(recipe)
+                fragmentManager?.popBackStack()
 
-            MainActivity.database?.addRecipe(recipe)
+                Toast.makeText(context, "Dodano $description_string pomyślnie",Toast.LENGTH_SHORT).show()
+
+            }else{
+                Toast.makeText(context,"Wprowadź brakujące dane",Toast.LENGTH_SHORT).show()
+            }
         }
     }
+
+
 
     fun setAdapter() {
         adapter = IngredientsRecycleViewAdapter(IngreadientsList!!)

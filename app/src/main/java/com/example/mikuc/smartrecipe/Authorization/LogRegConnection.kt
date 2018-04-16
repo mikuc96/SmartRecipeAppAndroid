@@ -25,9 +25,8 @@ class LogRegConnection(ac: Activity) {
 
     var inter : logRegConnectionInterface?=null
 
-    fun LogInbyEmailandPassword(email: String, password: String) {
+    fun LogInByEmailandPassword(email: String, password: String) {
         inter?.showProgress()
-
         activity?.let {
             mAuth?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(it) { task ->
@@ -36,16 +35,12 @@ class LogRegConnection(ac: Activity) {
                         inter?.sentMassage("Logged in successfully")
                         inter?.InVisibleNavHeader()
                         inter?.hideProgress()
-                        MainActivity.database=FireBaseDB()
                         Log.d("Log", "Login ok")
                     } else {
                         inter?.sentMassage("Unsuccessful, check input data")
                         inter?.hideProgress()
                         Log.d("Log", "Bad Login")
-
                     }
-
-
                 }
         }
     }
@@ -53,7 +48,7 @@ class LogRegConnection(ac: Activity) {
 
 
 
-    fun createUserbyEmailandPassword(email:String, password:String, fistname:String, lastname:String){
+    fun createUserByEmailandPassword(email:String, password:String, fistname:String, lastname:String){
         Log.d("msg", email+" "+password+" "+fistname+" "+lastname)
         inter?.showProgress()
         this.activity?.let {
@@ -102,7 +97,6 @@ class LogRegConnection(ac: Activity) {
         val currentUser = mAuth?.currentUser
         if(currentUser!=null) inter?.InVisibleNavHeader()
         else                  inter?.VisibleNavHeader()
-//        MainActivity.database= FireBaseDB()
     }
 
     fun LogOut() {

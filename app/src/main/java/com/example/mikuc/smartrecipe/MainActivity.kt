@@ -1,29 +1,29 @@
 package com.example.mikuc.smartrecipe
-import android.content.Context
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.view.MenuItem
-import android.support.v4.view.GravityCompat
-import android.support.v7.widget.Toolbar
-import android.widget.Button
-import kotlinx.android.synthetic.main.activity_main.*
 
+import android.os.Bundle
+import android.support.v4.view.GravityCompat
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.Toast
 import com.example.mikuc.smartrecipe.Authorization.LogRegConnection
 import com.example.mikuc.smartrecipe.Authorization.logRegConnectionInterface
 import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
 import com.example.mikuc.smartrecipe.Dialogs.LoginByEmailAndPasswordDialogs
-
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.example.mikuc.smartrecipe.Interfaces.StartShowRecipesFragmentFromAddRecipe
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 
 
-class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFragment.profileFragmentInterface {
+class MainActivity : AppCompatActivity(), logRegConnectionInterface,
+        ProfileFragment.profileFragmentInterface, StartShowRecipesFragmentFromAddRecipe {
 
-
+    override fun startShowRecipeFragment() {
+        toast("MSGGGGGGGGGGGGGGGGGGGG")
+        setFragment("Twoje Przepisy")
+    }
 
     private val manager = supportFragmentManager
     private var facebookLoginBtn:Button? = null
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFrag
     private var emailLoginBtn:Button? = null
     private var logRegClass: LogRegConnection?=null
     private var dial: LoginByEmailAndPasswordDialogs?=null
+    private var addRecipeFragment:AddRecipeFragment?=null
 
     companion object {
         var database:FireBaseDB?=FireBaseDB()
@@ -39,12 +40,16 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFrag
     override fun onStart() {
         super.onStart()
         logRegClass?.IfLogedin()
+
         progressBar2.visibility=View.GONE
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        addRecipeFragment=AddRecipeFragment()
+        addRecipeFragment?.setListener(this)
 
         setContentView(R.layout.activity_main)
         logRegClass= LogRegConnection(this@MainActivity)
@@ -70,14 +75,12 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface, ProfileFrag
         googleLoginBtn=headerLayout.findViewById(R.id.google_login_btn)
         dial= LoginByEmailAndPasswordDialogs(this@MainActivity)
         VisibleNavHeader()
-        nav_view.menu.getItem(0).isChecked = true
+        nav_view.menu.getItem(0).isChecked=true
         actionbar?.title="Twoje Przepisy"
         setFragment("Twoje Przepisy")
-
-
     }
 
-    fun setFragment(id: String) {
+    private fun setFragment(id: String) {
         when (id) {
 
             "Dodaj Przepis" -> {

@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.Toast
 import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDbInterfaceRefreshAdapter
 import com.example.mikuc.smartrecipe.DataModels.RecipeModel
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_show_recipes.*
 
 class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
@@ -39,6 +41,14 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
             val intent = Intent(activity, ShowRecipeDetails::class.java)
             intent.putExtra("TAG",position)
             startActivity(intent)
+        }
+
+        show_recipes_list_view.onItemLongClickListener=AdapterView.OnItemLongClickListener { parent, view, position, id ->
+
+            val key:String= listOfRecipes!![position].key
+            MainActivity.database!!.removeRecipe(key)
+
+            true
         }
     }
 

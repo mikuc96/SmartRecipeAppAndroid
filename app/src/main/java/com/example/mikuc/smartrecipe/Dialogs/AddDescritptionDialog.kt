@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
-import android.view.WindowManager
 import android.widget.EditText
 import com.example.mikuc.smartrecipe.R
 
@@ -28,8 +27,6 @@ class AddDescritptionDialog: DialogFragment(){
         val builder= AlertDialog.Builder(context!!)
         val li = activity!!.layoutInflater
         val view = li.inflate(R.layout.add_description_dialog, null)
-        view.requestFocus()
-        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         builder.setView(view)
                 .setPositiveButton("Ok",{_,_->
 

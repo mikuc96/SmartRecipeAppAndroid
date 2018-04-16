@@ -20,7 +20,7 @@ class FireBaseDB {
 
 
     private var mAuth: FirebaseAuth? = FirebaseAuth.getInstance()
-    private var database:DatabaseReference?=null
+    var database:DatabaseReference?=null
     var inter:FireBaseDbInterfaceRefreshAdapter?=null
     init {
 
@@ -41,7 +41,7 @@ class FireBaseDB {
 
     fun addRecipe(recipe:RecipeModel)
     {
-        database?.child("Recipes")?.child(hashCode().toString())?.setValue(recipe)
+        database?.child("Recipes")?.child(recipe.key)?.setValue(recipe)
     }
 
     private fun addRecipeListener(){
@@ -65,6 +65,11 @@ class FireBaseDB {
         })
     }
 
+    fun removeRecipe(key:String){
+
+        database?.child("Recipes")?.child(key)?.removeValue()
+
+    }
 
     init {
         addRecipeListener()

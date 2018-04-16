@@ -6,7 +6,8 @@ data class RecipeModel(val name:String,
                        val ingredients: ArrayList<Ingredient>,
                        val description:String,
                        val time:String,
-                       val people:String)
+                       val people:String,
+                       val key:String)
 {
-    constructor():this("","", arrayListOf(),"","",""){}
+    constructor():this("","", arrayListOf(),"","","",""){}
 }

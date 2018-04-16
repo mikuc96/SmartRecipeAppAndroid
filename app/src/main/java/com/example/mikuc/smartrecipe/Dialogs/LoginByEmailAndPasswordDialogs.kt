@@ -31,7 +31,7 @@ class LoginByEmailAndPasswordDialogs(activity:Activity)
                             val email=view?.findViewById<EditText>(R.id.email_emailLoginDialog)?.text.toString()
                             val password=view?.findViewById<EditText>(R.id.password_emailLoginDialog)?.text.toString()
 
-                            logRegClass?.LogInbyEmailandPassword(email,password)
+                            logRegClass?.LogInByEmailandPassword(email,password)
                             Log.d("msg", email+" "+password)
 
                         })
@@ -43,7 +43,7 @@ class LoginByEmailAndPasswordDialogs(activity:Activity)
         regButton?.setOnClickListener {
             dialog.hide()
             val regDialog=RegByLoginAndPasswordDialog(ac)
-            regDialog.createRegbyLoginAndPasswordDialog()
+            regDialog.createRegByLoginAndPasswordDialog()
         }
 
     }

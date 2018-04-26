@@ -1,45 +1,41 @@
 package com.example.mikuc.smartrecipe
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import com.example.mikuc.smartrecipe.DataModels.Ingredient
 import com.example.mikuc.smartrecipe.DataModels.RecipeModel
-import com.example.mikuc.smartrecipe.Dialogs.AddDescritptionDialog
+import com.example.mikuc.smartrecipe.Dialogs.AddDescriptionDialog
 import com.example.mikuc.smartrecipe.Dialogs.AddIngredientDialog
-import com.example.mikuc.smartrecipe.Dialogs.TransferInformationFromAddDescritptionDialog
-import com.example.mikuc.smartrecipe.Interfaces.StartShowRecipesFragmentFromAddRecipe
+import com.example.mikuc.smartrecipe.Dialogs.SendDescriptionToAddRecipeFragment
+import com.example.mikuc.smartrecipe.Interfaces.AddRecipeInterface
 import com.example.mikuc.smartrecipe.Interfaces.transferDataFromIngreadientDialog
 
 import com.example.mikuc.smartrecipe.RecycleView.IngredientsRecycleViewAdapter
 import kotlinx.android.synthetic.main.fragment_add_recipe.*
-import org.jetbrains.anko.act
 
 
-class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, TransferInformationFromAddDescritptionDialog {
+class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, SendDescriptionToAddRecipeFragment {
+
+    private var addIngredientDialog: AddIngredientDialog? = null
+    private var addDescriptionDialog: AddDescriptionDialog? = null
+    private var adapter: IngredientsRecycleViewAdapter? = null
+    private var ingredientsList: ArrayList<Ingredient>? = ArrayList()
+    private var name:String?=null
+    private var hardness:String?=null
+    private var people:String?=null
+    private var time:String?=null
+    private var descriptionString:String?=null
+    private var description: TextView? = null
 
 
+    private var myInterface:AddRecipeInterface?=null
 
-    var AddIngreadientDialog: AddIngredientDialog? = null
-    var AddDescritptionDialog: AddDescritptionDialog? = null
-    var adapter: IngredientsRecycleViewAdapter? = null
-
-    var IngreadientsList: ArrayList<Ingredient>? = ArrayList()
-    var name:String?=null
-    var hardness:String?=null
-    var people:String?=null
-    var time:String?=null
-    var description_string:String?=null
-    var description: TextureView? = null
-
-
-    var myinterface:StartShowRecipesFragmentFromAddRecipe?=null
-
-    fun setListener(listener:StartShowRecipesFragmentFromAddRecipe){
-        myinterface=listener
+    fun setListener(listener:AddRecipeInterface){
+        myInterface=listener
 
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -50,31 +46,26 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, Transfe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AddIngreadientDialog = AddIngredientDialog()
-        AddDescritptionDialog = AddDescritptionDialog()
+        addIngredientDialog = AddIngredientDialog()
+        addDescriptionDialog = AddDescriptionDialog()
 
-        AddIngreadientDialog?.setListener(this)
-        AddDescritptionDialog?.setListener(this)
+        addIngredientDialog?.setListener(this)
+        addDescriptionDialog?.setListener(this)
     }
 
     override fun onStart() {
         super.onStart()
-        fragmentManager?.addOnBackStackChangedListener(
-                object : FragmentManager.OnBackStackChangedListener {
-                    override fun onBackStackChanged() {
-                        activity?.actionBar?.title="Twoje Przepisy"
-                    }
-                })
+        fragmentManager?.addOnBackStackChangedListener { activity?.actionBar?.title="Twoje Przepisy" }
         recycle_view.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
         setAdapter()
 
 
 
         add_ingredient_btn.setOnClickListener {
-            AddIngreadientDialog?.show(fragmentManager, "Add ingreadient")
+            addIngredientDialog?.show(fragmentManager, "Add ingreadient")
         }
         add_description_btn.setOnClickListener {
-            AddDescritptionDialog?.show(fragmentManager, "Add description")
+            addDescriptionDialog?.show(fragmentManager, "Add description")
         }
         add_recipe_btn.setOnClickListener {
 
@@ -97,14 +88,13 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, Transfe
             if(add_recipe_rb_2h.isChecked) time="2h"
 
 
-            description_string.isNullOrEmpty()
-            if(!name!!.isEmpty() && !IngreadientsList!!.isEmpty() && !description_string.isNullOrEmpty())
+            if(!name!!.isEmpty() && !ingredientsList!!.isEmpty() && !descriptionString.isNullOrEmpty())
             {
-                val recipe=RecipeModel(name!!,hardness!!,IngreadientsList!!,description_string!!,time!!,people!!,hashCode().toString())
-                MainActivity.database?.addRecipe(recipe)
+                val recipe=RecipeModel(name!!,hardness!!,ingredientsList!!,descriptionString!!,time!!,people!!,hashCode().toString())
+                myInterface?.addRecipeToFireBaseDb(recipe)
                 fragmentManager?.popBackStack()
 
-                Toast.makeText(context, "Dodano $description_string pomyślnie",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Dodano "+name +" pomyślnie",Toast.LENGTH_SHORT).show()
 
             }else{
                 Toast.makeText(context,"Wprowadź brakujące dane",Toast.LENGTH_SHORT).show()
@@ -112,22 +102,18 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, Transfe
         }
     }
 
-
-
-    fun setAdapter() {
-        adapter = IngredientsRecycleViewAdapter(IngreadientsList!!)
+    private fun setAdapter() {
+        adapter = IngredientsRecycleViewAdapter(ingredientsList!!)
         recycle_view.adapter = adapter
     }
 
-    override fun tranferData(msg: String) {
-
+    override fun transferData(msg: String) {
         fragment_add_recipe_description_tv.text = msg
-        description_string=msg
+        descriptionString=msg
     }
 
     override fun sendData(item: Ingredient) {
-
-        IngreadientsList?.add(item)
+        ingredientsList?.add(item)
         setAdapter()
     }
 

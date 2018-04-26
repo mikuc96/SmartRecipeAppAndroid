@@ -26,8 +26,8 @@ class RegByLoginAndPasswordDialog (ac: Activity)
                             val email=view?.findViewById<EditText>(R.id.email_reg_LoginDialog)?.text.toString()
                             val password=view?.findViewById<EditText>(R.id.password_reg_LoginDialog)?.text.toString()
 
-                            logRegClass?.createUserByEmailandPassword(email,password,name, surname)
-                            logRegClass?.LogInByEmailandPassword(email,password)
+                            logRegClass?.createUserByEmailAndPassword(email,password,name, surname)
+                            logRegClass?.logInByEmailAndPassword(email,password)
 
                         })
         AlertBuilder.setNegativeButton("Anuluj", { _, _ ->

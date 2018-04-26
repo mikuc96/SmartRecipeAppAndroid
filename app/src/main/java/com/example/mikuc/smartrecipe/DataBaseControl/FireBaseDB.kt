@@ -2,9 +2,7 @@ package com.example.mikuc.smartrecipe.DataBaseControl
 
 import com.example.mikuc.smartrecipe.DataModels.RecipeModel
 import com.google.firebase.auth.FirebaseAuth
-import android.content.ContentValues.TAG
 import com.google.firebase.database.*
-import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
@@ -12,7 +10,7 @@ import com.google.firebase.database.ValueEventListener
 
 
 interface FireBaseDbInterfaceRefreshAdapter{
-    fun RefreshAdapter()
+    fun refreshAdapter()
 }
 
 
@@ -22,11 +20,6 @@ class FireBaseDB {
     private var mAuth: FirebaseAuth? = FirebaseAuth.getInstance()
     var database:DatabaseReference?=null
     var inter:FireBaseDbInterfaceRefreshAdapter?=null
-    init {
-
-        if(mAuth?.currentUser!=null) database = FirebaseDatabase.getInstance().getReference(mAuth?.currentUser?.uid)
-
-    }
 
     fun setListener(lisener:FireBaseDbInterfaceRefreshAdapter)
     {
@@ -35,7 +28,10 @@ class FireBaseDB {
 
 
 
-    var recipesList:ArrayList<RecipeModel>?= ArrayList()
+    companion object {
+        var recipesList:ArrayList<RecipeModel>?= ArrayList()
+
+    }
 
 
 
@@ -60,9 +56,10 @@ class FireBaseDB {
                         Log.d("FireBaseDbb for", recipesList?.size.toString())
                     }
                 }
-                inter?.RefreshAdapter()
+                inter?.refreshAdapter()
             }
         })
+        inter?.refreshAdapter()
     }
 
     fun removeRecipe(key:String){
@@ -71,9 +68,17 @@ class FireBaseDB {
 
     }
 
+    fun newInitialization()
+    {
+        database = FirebaseDatabase.getInstance().getReference(mAuth?.currentUser?.uid)
+    }
     init {
+        database = FirebaseDatabase.getInstance().getReference(mAuth?.currentUser?.uid)
         addRecipeListener()
+
         Log.d("FireBaseDbb init", recipesList?.size.toString())
+        inter?.refreshAdapter()
+
     }
 
 

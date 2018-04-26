@@ -7,17 +7,17 @@ import android.support.v7.app.AlertDialog
 import android.widget.EditText
 import com.example.mikuc.smartrecipe.R
 
-interface TransferInformationFromAddDescritptionDialog{
+interface SendDescriptionToAddRecipeFragment{
 
-    fun tranferData(msg:String)
+    fun transferData(msg:String)
 }
-class AddDescritptionDialog: DialogFragment(){
+class AddDescriptionDialog: DialogFragment(){
 
     private var descritption:String?=null
-    var inter:TransferInformationFromAddDescritptionDialog?=null
+    var inter:SendDescriptionToAddRecipeFragment?=null
 
 
-    fun setListener(listener:TransferInformationFromAddDescritptionDialog)
+    fun setListener(listener:SendDescriptionToAddRecipeFragment)
     {
         inter=listener
     }
@@ -34,7 +34,7 @@ class AddDescritptionDialog: DialogFragment(){
                     descritption=et.text.toString()
                     if(descritption!=null)
                     {
-                        inter?.tranferData(descritption!!)
+                        inter?.transferData(descritption!!)
                     }
 
                 })

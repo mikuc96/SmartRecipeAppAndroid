@@ -9,21 +9,35 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.example.mikuc.smartrecipe.Authorization.LogRegConnection
-import com.example.mikuc.smartrecipe.Authorization.logRegConnectionInterface
+import com.example.mikuc.smartrecipe.Authorization.LogRegConnectionInterface
 import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
+import com.example.mikuc.smartrecipe.DataModels.RecipeModel
 import com.example.mikuc.smartrecipe.Dialogs.LoginByEmailAndPasswordDialogs
-import com.example.mikuc.smartrecipe.Interfaces.StartShowRecipesFragmentFromAddRecipe
+import com.example.mikuc.smartrecipe.Interfaces.AddRecipeInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 
 
-class MainActivity : AppCompatActivity(), logRegConnectionInterface,
-        ProfileFragment.profileFragmentInterface, StartShowRecipesFragmentFromAddRecipe {
+class MainActivity : AppCompatActivity(), LogRegConnectionInterface,
+        ProfileFragment.profileFragmentInterface, AddRecipeInterface {
 
+
+    override fun addRecipeToFireBaseDb(recipe:RecipeModel) {
+        database?.addRecipe(recipe)
+    }
+    override fun createFireBaseDb() {
+        database= FireBaseDB()
+        showRecipeFragment?.setDb(database!!)
+        setFragment("Twoje Przepisy")
+
+//        showRecipeFragment?.setAdapter()
+
+    }
     override fun startShowRecipeFragment() {
         toast("MSGGGGGGGGGGGGGGGGGGGG")
-        setFragment("Twoje Przepisy")
+
     }
+
 
     private val manager = supportFragmentManager
     private var facebookLoginBtn:Button? = null
@@ -32,34 +46,22 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface,
     private var logRegClass: LogRegConnection?=null
     private var dial: LoginByEmailAndPasswordDialogs?=null
     private var addRecipeFragment:AddRecipeFragment?=null
-
-    companion object {
-        var database:FireBaseDB?=FireBaseDB()
-    }
+    private var showRecipeFragment:ShowRecipesFragment?=null
+    private var database:FireBaseDB?=null
 
     override fun onStart() {
         super.onStart()
-        logRegClass?.IfLogedin()
-
+        logRegClass?.ifLogIn()
         progressBar2.visibility=View.GONE
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        addRecipeFragment=AddRecipeFragment()
-        addRecipeFragment?.setListener(this)
-
-        setContentView(R.layout.activity_main)
-        logRegClass= LogRegConnection(this@MainActivity)
-
+    private fun setToolbar()
+    {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val actionbar = supportActionBar
         actionbar?.setDisplayHomeAsUpEnabled(true)
         actionbar?.setHomeAsUpIndicator(R.drawable.ic_menu)
-
         nav_view.setNavigationItemSelectedListener { menuItem ->
 
             menuItem.isChecked = true
@@ -74,10 +76,20 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface,
         facebookLoginBtn=headerLayout.findViewById(R.id.fb_login_btn)
         googleLoginBtn=headerLayout.findViewById(R.id.google_login_btn)
         dial= LoginByEmailAndPasswordDialogs(this@MainActivity)
-        VisibleNavHeader()
+        visibleNavHeader()
         nav_view.menu.getItem(0).isChecked=true
-        actionbar?.title="Twoje Przepisy"
-        setFragment("Twoje Przepisy")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        addRecipeFragment=AddRecipeFragment()
+        addRecipeFragment?.setListener(this)
+        showRecipeFragment= ShowRecipesFragment()
+
+        setContentView(R.layout.activity_main)
+        logRegClass= LogRegConnection(this@MainActivity)
+        setToolbar()
     }
 
     private fun setFragment(id: String) {
@@ -85,12 +97,12 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface,
 
             "Dodaj Przepis" -> {
                 manager.beginTransaction()
-                        .replace(R.id.content_frame, AddRecipeFragment())
+                        .replace(R.id.content_frame, addRecipeFragment)
                         .addToBackStack("AddRecipeFragment").commit()
             }
             "Twoje Przepisy" -> {
                 manager.beginTransaction()
-                        .replace(R.id.content_frame, ShowRecipesFragment())
+                        .replace(R.id.content_frame, showRecipeFragment)
                         .addToBackStack("ShowRecipesFragment").commit()
             }
             "Inteligentny Pomocnik" -> {
@@ -104,8 +116,6 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface,
                         .addToBackStack("ProfileFragment").commit()
             }
         }
-
-
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -117,7 +127,7 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface,
         return super.onOptionsItemSelected(item)
     }
 
-    override fun VisibleNavHeader()
+    override fun visibleNavHeader()
     {
 
         facebookLoginBtn?.visibility=View.VISIBLE
@@ -131,7 +141,7 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface,
         googleLoginBtn?.setOnClickListener {  }
 
     }
-    override fun InVisibleNavHeader()
+    override fun inVisibleNavHeader()
     {
         val user=logRegClass?.getUser()
         val nameUser=user?.email.toString()
@@ -142,13 +152,15 @@ class MainActivity : AppCompatActivity(), logRegConnectionInterface,
             setFragment("Twój Profil")
             drawer_layout.closeDrawers()
         }
+        setFragment("Twoje Przepisy")
     }
 
     override fun logOut() {
 
         Toast.makeText(applicationContext, "Logout succesfull", Toast.LENGTH_LONG).show()
-        logRegClass?.LogOut()
-        VisibleNavHeader()
+        logRegClass?.logOut()
+        visibleNavHeader()
+        database=null
     }
 
     override fun sentMassage(info: String) {

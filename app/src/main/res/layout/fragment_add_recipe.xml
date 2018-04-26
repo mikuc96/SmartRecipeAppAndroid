@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:background="#3f60a3"
         android:hint="Nazwa dania"
+        android:inputType="text"
         android:padding="5dp"
+        android:singleLine="true"
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold" />

@@ -10,12 +10,13 @@ import com.google.firebase.database.FirebaseDatabase
 
 
 
-interface logRegConnectionInterface{
-    fun InVisibleNavHeader()
+interface LogRegConnectionInterface{
+    fun inVisibleNavHeader()
     fun showProgress()
     fun hideProgress()
-    fun VisibleNavHeader()
+    fun visibleNavHeader()
     fun sentMassage(info:String)
+    fun createFireBaseDb()
 }
 class LogRegConnection(ac: Activity) {
 
@@ -23,18 +24,19 @@ class LogRegConnection(ac: Activity) {
     private var activity:Activity?= ac
 
 
-    var inter : logRegConnectionInterface?=null
+    var inter : LogRegConnectionInterface?=null
 
-    fun LogInByEmailandPassword(email: String, password: String) {
+    fun logInByEmailAndPassword(email: String, password: String) {
         inter?.showProgress()
         activity?.let {
             mAuth?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener(it) { task ->
                     if (task.isSuccessful) {
-
+                        inter?.createFireBaseDb()
                         inter?.sentMassage("Logged in successfully")
-                        inter?.InVisibleNavHeader()
+                        inter?.inVisibleNavHeader()
                         inter?.hideProgress()
+
                         Log.d("Log", "Login ok")
                     } else {
                         inter?.sentMassage("Unsuccessful, check input data")
@@ -48,7 +50,7 @@ class LogRegConnection(ac: Activity) {
 
 
 
-    fun createUserByEmailandPassword(email:String, password:String, fistname:String, lastname:String){
+    fun createUserByEmailAndPassword(email:String, password:String, fistname:String, lastname:String){
         Log.d("msg", email+" "+password+" "+fistname+" "+lastname)
         inter?.showProgress()
         this.activity?.let {
@@ -86,22 +88,26 @@ class LogRegConnection(ac: Activity) {
         return mAuth?.currentUser
     }
 
-     fun createDataBaseUserInfo(UserId: String, fistname: String, lastname: String) {
+     private fun createDataBaseUserInfo(UserId: String, fistname: String, lastname: String) {
         val currentUserDb = FirebaseDatabase.getInstance().reference!!.child(UserId)
         currentUserDb.child("firstName").setValue(fistname)
         currentUserDb.child("lastName").setValue(lastname)
     }
 
 
-    fun IfLogedin(){
+    fun ifLogIn(){
+
         val currentUser = mAuth?.currentUser
-        if(currentUser!=null) inter?.InVisibleNavHeader()
-        else                  inter?.VisibleNavHeader()
+        if(currentUser!=null){
+            inter?.createFireBaseDb()
+            inter?.inVisibleNavHeader()
+        }
+        else                  inter?.visibleNavHeader()
     }
 
-    fun LogOut() {
+    fun logOut() {
+        FireBaseDB.recipesList?.clear()
         mAuth?.signOut()
-        MainActivity.database?.recipesList=ArrayList()
     }
 
 
@@ -123,7 +129,7 @@ class LogRegConnection(ac: Activity) {
 //        }
 
     init {
-        if(ac is logRegConnectionInterface)
+        if(ac is LogRegConnectionInterface)
         {
             inter=ac
         }

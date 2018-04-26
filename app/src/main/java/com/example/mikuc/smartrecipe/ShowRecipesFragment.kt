@@ -10,6 +10,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
+import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
 import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDbInterfaceRefreshAdapter
 import com.example.mikuc.smartrecipe.DataModels.RecipeModel
 import com.google.firebase.database.FirebaseDatabase
@@ -17,14 +18,16 @@ import kotlinx.android.synthetic.main.fragment_show_recipes.*
 
 class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
 
+
+
     companion object {
         fun newInstance(): ShowRecipesFragment {
             return ShowRecipesFragment()
         }
     }
 
-    var ListView:ListView?=null
-
+    var fireDataBase:FireBaseDB?=null
+    var listView:ListView?=null
     private var listOfRecipes:ArrayList<RecipeModel>?= ArrayList()
 
      override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -33,8 +36,8 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
 
     override fun onStart() {
         super.onStart()
-        ListView=view?.findViewById(R.id.show_recipes_list_view)
-        MainActivity.database?.setListener(this)
+        listView=view?.findViewById(R.id.show_recipes_list_view)
+        fireDataBase?.setListener(this)
         setAdapter()
         show_recipes_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
 
@@ -46,24 +49,28 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
         show_recipes_list_view.onItemLongClickListener=AdapterView.OnItemLongClickListener { parent, view, position, id ->
 
             val key:String= listOfRecipes!![position].key
-            MainActivity.database!!.removeRecipe(key)
+            fireDataBase?.removeRecipe(key)
 
             true
         }
     }
 
-    private fun setAdapter(){
-        listOfRecipes=MainActivity.database?.recipesList
+     fun setAdapter(){
+//        Toast.makeText(context,"Setting adaper yours recipes",Toast.LENGTH_SHORT).show()
+        listOfRecipes=FireBaseDB.recipesList
         val recipeListNames:ArrayList<String>?=ArrayList()
         for(i in listOfRecipes!!){
             recipeListNames?.add(i.name)
         }
         val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, recipeListNames)
-        ListView?.adapter=adapter
+        listView?.adapter=adapter
     }
 
-    override fun RefreshAdapter() {
+    override fun refreshAdapter() {
         setAdapter()
     }
-
+     fun setDb(db:FireBaseDB)
+     {
+         fireDataBase=db
+     }
 }

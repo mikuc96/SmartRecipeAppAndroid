@@ -5,12 +5,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.LinearLayout
+import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
 import com.example.mikuc.smartrecipe.RecycleView.IngredientsRecycleViewAdapter
 import kotlinx.android.synthetic.main.activity_show_recipe_details.*
 
 class ShowRecipeDetails : AppCompatActivity() {
 
     private var itemNumber:Int?=null
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
@@ -32,7 +34,7 @@ class ShowRecipeDetails : AppCompatActivity() {
         actionbar?.setDisplayShowHomeEnabled(true)
 
         itemNumber=intent.getIntExtra("TAG",0)
-        val recipe=MainActivity.database?.recipesList?.get(itemNumber!!)
+        val recipe= FireBaseDB.recipesList?.get(itemNumber!!)
         actionbar?.title=recipe?.name
 
         activity_show_recipe_details_description_tv.text=recipe?.description

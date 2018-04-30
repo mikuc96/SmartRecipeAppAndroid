@@ -29,7 +29,6 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, SendDes
     private var people:String?=null
     private var time:String?=null
     private var descriptionString:String?=null
-    private var description: TextView? = null
 
 
     private var myInterface:AddRecipeInterface?=null
@@ -40,11 +39,11 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, SendDes
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.fragment_add_recipe, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         addIngredientDialog = AddIngredientDialog()
         addDescriptionDialog = AddDescriptionDialog()
@@ -60,7 +59,7 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, SendDes
         setAdapter()
 
 
-
+        clearData()
         add_ingredient_btn.setOnClickListener {
             addIngredientDialog?.show(fragmentManager, "Add ingreadient")
         }
@@ -117,5 +116,14 @@ class AddRecipeFragment : Fragment(), transferDataFromIngreadientDialog, SendDes
         setAdapter()
     }
 
+    private fun clearData()
+    {
+        add_recipe_name_et.text.clear()
+        ingredientsList?.clear()
+        fragment_add_recipe_description_tv.text=""
+        add_recipe_rb_easy.isChecked=true
+        add_recipe_rb_1.isChecked=true
+        add_recipe_rb_10min.isChecked=true
+    }
 }
 

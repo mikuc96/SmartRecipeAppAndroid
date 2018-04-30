@@ -47,9 +47,6 @@ class LogRegConnection(ac: Activity) {
         }
     }
 
-
-
-
     fun createUserByEmailAndPassword(email:String, password:String, fistname:String, lastname:String){
         Log.d("msg", email+" "+password+" "+fistname+" "+lastname)
         inter?.showProgress()
@@ -63,6 +60,7 @@ class LogRegConnection(ac: Activity) {
                         inter?.hideProgress()
                         val userId = mAuth!!.currentUser!!.uid
                         createDataBaseUserInfo(userId, fistname, lastname)
+                        inter
                         Log.d("tag" , "creating acount is succesfull")
 
                     } else {

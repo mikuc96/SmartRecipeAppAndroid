@@ -66,6 +66,11 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
         listView?.adapter=adapter
     }
 
+    fun listOfRecipesIsEmpty() : Boolean
+    {
+        return listOfRecipes!!.isEmpty()
+    }
+
     override fun refreshAdapter() {
         setAdapter()
     }

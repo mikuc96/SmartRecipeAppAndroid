@@ -19,9 +19,9 @@ class ProfileFragment : Fragment() {
 
 
 
-    var profileInterface: profileFragmentInterface?=null
-    var firstName:String?=null;
-    var lastName:String?=null;
+    private var profileInterface: profileFragmentInterface?=null
+    private var firstName:String?=null
+    private var lastName:String?=null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 

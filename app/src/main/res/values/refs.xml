@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="checl_black">@drawable/ic_check_black_24dp</drawable>
+</resources>

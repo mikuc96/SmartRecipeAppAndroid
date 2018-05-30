@@ -1,5 +1,6 @@
 package com.example.mikuc.smartrecipe
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -13,11 +14,28 @@ import android.widget.Toast
 import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
 import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDbInterfaceRefreshAdapter
 import com.example.mikuc.smartrecipe.DataModels.RecipeModel
-import com.google.firebase.database.FirebaseDatabase
+import com.example.mikuc.smartrecipe.Dialogs.ShowRecipeListMenu
+import com.example.mikuc.smartrecipe.Dialogs.ShowRecipeListMenuInterafce
+import com.example.mikuc.smartrecipe.Interfaces.AddRecipeFromShowRecipeFragment
 import kotlinx.android.synthetic.main.fragment_show_recipes.*
 
-class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
+class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter, ShowRecipeListMenuInterafce {
+    override fun removeRecipe() {
 
+        fireDataBase?.removeRecipe(key!!)
+        optionListDialog!!.dismiss()
+        Toast.makeText(context,"Remove recipe "+key,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun shareRecipe() {
+
+
+
+    }
+
+    override fun editRecipe() {
+
+    }
 
 
     companion object {
@@ -25,13 +43,23 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
             return ShowRecipesFragment()
         }
     }
+    private var key:String?=null
 
-    var fireDataBase:FireBaseDB?=null
-    var listView:ListView?=null
+    private var inter: AddRecipeFromShowRecipeFragment?=null
+    private var fireDataBase:FireBaseDB?=null
+    private var listView:ListView?=null
+    private var optionListDialog:ShowRecipeListMenu?=null
     private var listOfRecipes:ArrayList<RecipeModel>?= ArrayList()
 
      override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_show_recipes, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        optionListDialog= ShowRecipeListMenu()
+        optionListDialog?.setListener(this)
     }
 
     override fun onStart() {
@@ -39,6 +67,10 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
         listView=view?.findViewById(R.id.show_recipes_list_view)
         fireDataBase?.setListener(this)
         setAdapter()
+        show_recipe_add_button.setOnClickListener {
+
+            inter?.addRecipefromShowRecipeFragment()
+        }
         show_recipes_list_view.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
 
             val intent = Intent(activity, ShowRecipeDetails::class.java)
@@ -48,20 +80,26 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
 
         show_recipes_list_view.onItemLongClickListener=AdapterView.OnItemLongClickListener { parent, view, position, id ->
 
-            val key:String= listOfRecipes!![position].key
-            fireDataBase?.removeRecipe(key)
-
+            key=listOfRecipes!![position].key
+            optionListDialog?.show(fragmentManager, "optionListDialog")
             true
         }
     }
 
      fun setAdapter(){
-//        Toast.makeText(context,"Setting adaper yours recipes",Toast.LENGTH_SHORT).show()
         listOfRecipes=FireBaseDB.recipesList
-        val recipeListNames:ArrayList<String>?=ArrayList()
-        for(i in listOfRecipes!!){
-            recipeListNames?.add(i.name)
-        }
+         val recipeListNames:ArrayList<String>?=ArrayList()
+         if(listOfRecipes!!.isEmpty())
+         {
+
+         }else
+         {
+             for(i in listOfRecipes!!){
+                 recipeListNames?.add(i.name)
+             }
+         }
+
+
         val adapter = ArrayAdapter(context, android.R.layout.simple_list_item_1, recipeListNames)
         listView?.adapter=adapter
     }
@@ -69,6 +107,14 @@ class ShowRecipesFragment : Fragment(), FireBaseDbInterfaceRefreshAdapter {
     fun listOfRecipesIsEmpty() : Boolean
     {
         return listOfRecipes!!.isEmpty()
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if(context is AddRecipeFromShowRecipeFragment)
+        {
+            inter=context
+        }
     }
 
     override fun refreshAdapter() {

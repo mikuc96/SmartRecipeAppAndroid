@@ -12,15 +12,17 @@ import android.widget.Toast
 import com.example.mikuc.smartrecipe.Authorization.LogRegConnection
 import com.example.mikuc.smartrecipe.Authorization.LogRegConnectionInterface
 import com.example.mikuc.smartrecipe.DataBaseControl.FireBaseDB
+import com.example.mikuc.smartrecipe.DataModels.Ingredient
 import com.example.mikuc.smartrecipe.DataModels.RecipeModel
 import com.example.mikuc.smartrecipe.Dialogs.LoginByEmailAndPasswordDialogs
+import com.example.mikuc.smartrecipe.Interfaces.AddRecipeFromShowRecipeFragment
 import com.example.mikuc.smartrecipe.Interfaces.AddRecipeInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity(), LogRegConnectionInterface,
-        ProfileFragment.profileFragmentInterface, AddRecipeInterface {
+        ProfileFragment.profileFragmentInterface, AddRecipeInterface, AddRecipeFromShowRecipeFragment {
 
     private val manager = supportFragmentManager
     private var facebookLoginBtn: Button? = null
@@ -71,7 +73,6 @@ class MainActivity : AppCompatActivity(), LogRegConnectionInterface,
         addRecipeFragment = AddRecipeFragment()
         addRecipeFragment?.setListener(this)
         showRecipeFragment = ShowRecipesFragment()
-
         setContentView(R.layout.activity_main)
         logRegClass = LogRegConnection(this@MainActivity)
         setToolbar()
@@ -84,25 +85,38 @@ class MainActivity : AppCompatActivity(), LogRegConnectionInterface,
                 manager.beginTransaction()
                         .replace(R.id.content_frame, addRecipeFragment)
                         .addToBackStack("AddRecipeFragment").commit()
+
+                actionbar?.title="Dodaj Przepis"
             }
             "Twoje Przepisy" -> {
                 manager.beginTransaction()
                         .replace(R.id.content_frame, showRecipeFragment)
                         .addToBackStack("ShowRecipesFragment").commit()
+
+                actionbar?.title="Twoje Przepisy"
+
             }
-            "Inteligentny Pomocnik" -> {
+            "Inteligentny pomocnik" -> {
                 manager.beginTransaction()
                         .replace(R.id.content_frame, AssistantFragment())
                         .addToBackStack("AssistantFragment").commit()
+
+                actionbar?.title="Inteligentny Pomocnik"
             }
             "Twój Profil" -> {
                 manager.beginTransaction()
                         .replace(R.id.content_frame, ProfileFragment())
                         .addToBackStack("ProfileFragment").commit()
+
+                actionbar?.title="Twój Profil"
             }
         }
     }
 
+    override fun onBackPressed() {
+        actionbar?.title="Twoje Przepisy"
+        super.onBackPressed()
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
@@ -141,7 +155,6 @@ class MainActivity : AppCompatActivity(), LogRegConnectionInterface,
     }
 
     override fun logOut() {
-
         Toast.makeText(applicationContext, "Logout succesfull", Toast.LENGTH_LONG).show()
         logRegClass?.logOut()
         visibleNavHeader()
@@ -170,16 +183,16 @@ class MainActivity : AppCompatActivity(), LogRegConnectionInterface,
         database = FireBaseDB()
         showRecipeFragment?.setDb(database!!)
         actionbar?.title = "Twoje Przepisy"
-
-//        if(showRecipeFragment!!.listOfRecipesIsEmpty())  showRecipeFragment?.setAdapter()
-
-
     }
 
     override fun startShowRecipeFragment() {
         toast("MSGGGGGGGGGGGGGGGGGGGG")
-
     }
+
+    override fun addRecipefromShowRecipeFragment() {
+        setFragment("Dodaj Przepis")
+    }
+
 
 
 }

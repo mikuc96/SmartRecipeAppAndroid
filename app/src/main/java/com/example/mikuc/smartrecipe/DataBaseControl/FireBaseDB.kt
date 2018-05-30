@@ -36,8 +36,6 @@ class FireBaseDB {
 
     }
 
-
-
     fun addRecipe(recipe:RecipeModel)
     {
         database?.child("Recipes")?.child(recipe.key)?.setValue(recipe)
@@ -108,6 +106,7 @@ class FireBaseDB {
     }
 
     init {
+
         database = FirebaseDatabase.getInstance().getReference(mAuth?.currentUser?.uid)
         addRecipeListener()
         getUserFirstNameListener()

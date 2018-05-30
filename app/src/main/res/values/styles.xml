@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
 
 
-    <style name="mkTheme" parent="Theme.AppCompat.NoActionBar" >
+    <style name="mkTheme" parent="android:Theme" >
         <item name="android:colorForeground">@color/foreground_material_dark_1</item>
     </style>
 </resources>

@@ -60,7 +60,6 @@ class LogRegConnection(ac: Activity) {
                         inter?.hideProgress()
                         val userId = mAuth!!.currentUser!!.uid
                         createDataBaseUserInfo(userId, fistname, lastname)
-                        inter
                         Log.d("tag" , "creating acount is succesfull")
 
                     } else {
@@ -94,6 +93,7 @@ class LogRegConnection(ac: Activity) {
 
 
     fun ifLogIn(){
+
 
         val currentUser = mAuth?.currentUser
         if(currentUser!=null){

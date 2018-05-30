@@ -7,7 +7,7 @@ data class RecipeModel(val name:String,
                        val description:String,
                        val time:String,
                        val people:String,
-                       val key:String)
+                       var key:String)
 {
     constructor():this("","", arrayListOf(),"","","",""){}
 }
